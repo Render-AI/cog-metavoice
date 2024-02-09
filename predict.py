@@ -1,4 +1,5 @@
 import os
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
 from cog import BasePredictor, Input, Path
 from pyngrok import ngrok, conf
 
