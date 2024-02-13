@@ -737,6 +737,14 @@ class Predictor(BasePredictor):
         temperature: float = Input(
             description="Expressiveness / Randomness",
             default=1.0
+        ),
+        guidance_scale: float = Input(
+            description="Guidance scale",
+            default=None
+        ),
+        max_new_tokens: int = Input(
+            description="Max new tokens",
+            default=864
         )
     ) -> Path:
         self.sampling_config.spk_cond_path = input_audio
@@ -750,8 +758,9 @@ class Predictor(BasePredictor):
             self.sampling_config.enhancer,
             self.first_stage_ckpt_path,
             self.second_stage_ckpt_path,
-            self.sampling_config.guidance_scale,
-            max_new_tokens=self.sampling_config.max_new_tokens,
+            guidance_scale,  # originally self.sampling_config.guidance_scale,
+            # originallyy max_new_tokens=self.sampling_config.max_new_tokens,
+            max_new_tokens=max_new_tokens,
             top_k=self.sampling_config.top_k,
             top_p=self.sampling_config.top_p,
             temperature=temperature  # originally: temperature=self.sampling_config.temperature,
