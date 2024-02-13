@@ -1,51 +1,12 @@
 build:
-  gpu: true
-  cuda: "12.1"
-  python_version: "3.11"
-  system_packages:
-    - "libgl1-mesa-glx"
-    - "libglib2.0-0"
-    - "ffmpeg"
-    - "software-properties-common"
-    - "python3-launchpadlib"
-    - "gcc"
-    - "g++"
-    - "aria2"
-    - "git"
-    - "git-lfs"
-    - "wget"
-    - "libgl1"
-    - "cmake"
-    - "libgtk2.0-0"
-    - "libopenmpi-dev"
-  python_packages:
-    - torch==2.1.0
-    - torchvision==0.16.0
-    - torchaudio==2.1.0
-    - torchtext==0.16.0
-    - torchdata==0.7.0
-    - notebook==7.0.8
-    - pyngrok==7.1.1
-    - pickleshare==0.7.5
-    - ipywidgets==8.1.2
-    - imageio-ffmpeg==0.4.9
-    - pandas==2.2.0
-    - numpy==1.23.5
-    - transformers==4.37.2
-    - librosa==0.10.1
-    - tqdm==4.66.1
-    - tiktoken==0.6.0
-    - audiocraft==1.2.0
-    - ninja==1.11.1.1
-    - fastapi==0.98.0
-    - uvicorn==0.27.0.post1
-    - tyro==0.7.2
-    - deepfilternet
-    - pydub==0.25.1
-    - soundfile==0.12.1
-    - gradio==3.50.2
-    - huggingface-hub==0.20.3
-    - "hf-transfer"
+  gpu: false
+  python_version: "3.10"
   run:
-    - pip install flash-attn
+    - apt update -y && apt install -y software-properties-common python3-launchpadlib && apt update -y && add-apt-repository -y ppa:git-core/ppa && apt update -y
+    - apt install -y gcc g++ aria2 git git-lfs wget libgl1 libglib2.0-0 ffmpeg cmake libgtk2.0-0 libopenmpi-dev
+    - wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run && sh cuda_12.1.0_530.30.02_linux.run --silent --toolkit
+    - pip install torch==2.1.0+cu121 torchvision==0.16.0+cu121 torchaudio==2.1.0+cu121 torchtext==0.16.0 torchdata==0.7.0 --extra-index-url https://download.pytorch.org/whl/cu121 -U
+    - pip install notebook pyngrok pickleshare ipywidgets imageio-ffmpeg pandas numpy==1.23.5
+    - pip install transformers librosa tqdm tiktoken audiocraft ninja flash-attn fastapi uvicorn tyro deepfilternet pydub soundfile gradio huggingface_hub
+    - git clone -b dev https://github.com/camenduru/metavoice-src/content/metavoice-src
 predict: "/src/predict.py:Predictor"
