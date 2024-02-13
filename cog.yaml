@@ -48,5 +48,4 @@ build:
     - "hf-transfer"
   run:
     - pip install flash-attn
-    - git clone -b dev https://github.com/camenduru/metavoice-src /content/metavoice-src
 predict: "/src/predict.py:Predictor"
