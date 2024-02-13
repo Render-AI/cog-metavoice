@@ -47,5 +47,6 @@ build:
     - huggingface-hub==0.20.3
     - "hf-transfer"
   run:
-    - pip install flash-attn    
+    - pip install flash-attn
+    - git clone -b dev https://github.com/camenduru/metavoice-src /content/metavoice-src
 predict: "/src/predict.py:Predictor"
