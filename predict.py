@@ -1,10 +1,10 @@
-from fam.quantiser.text.tokenise import TrainedBPETokeniser
-from fam.quantiser.audio.speaker_encoder.model import SpeakerEncoder
-from fam.llm.utils import normalize_text
-from fam.llm.model import GPT, GPTConfig
-from fam.llm.enhancers import BaseEnhancer, get_enhancer
-from fam.llm.decoders import Decoder, EncodecDecoder
-from fam.llm.adapters import FlattenedInterleavedEncodec2Codebook, TiltedEncodec
+from content.metavoice.fam.quantiser.text.tokenise import TrainedBPETokeniser
+from content.metavoice.fam.quantiser.audio.speaker_encoder.model import SpeakerEncoder
+from content.metavoice.fam.llm.utils import normalize_text
+from content.metavoice.fam.llm.model import GPT, GPTConfig
+from content.metavoice.fam.llm.enhancers import BaseEnhancer, get_enhancer
+from content.metavoice.fam.llm.decoders import Decoder, EncodecDecoder
+from content.metavoice.fam.llm.adapters import FlattenedInterleavedEncodec2Codebook, TiltedEncodec
 from huggingface_hub import snapshot_download
 import tyro
 import tqdm.contrib.concurrent
@@ -26,8 +26,8 @@ from cog import BasePredictor, Input, Path
 import os
 os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
 
-sys.path.append('/content/metavoice-src')
-os.chdir('/content/metavoice-src')
+sys.path.append('/content/metavoice')
+os.chdir('/content/metavoice')
 
 
 @dataclass
