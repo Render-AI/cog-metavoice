@@ -666,7 +666,8 @@ class SamplingControllerConfig:
 class Predictor(BasePredictor):
     def setup(self) -> None:
         self.sampling_config = SamplingControllerConfig
-        model_dir = snapshot_download(repo_id=self.sampling_config.huggingface_repo_id)
+        model_dir = snapshot_download(
+            repo_id=self.sampling_config.huggingface_repo_id)
         self.first_stage_ckpt_path = get_first_stage_path(model_dir)
         self.second_stage_ckpt_path = get_second_stage_path(model_dir)
 
@@ -693,17 +694,32 @@ class Predictor(BasePredictor):
         )
 
         self.sampling_config.max_new_tokens *= (
-            2  # deal with max_new_tokens for flattened interleaving! (should scale with num_codebooks?)
+            # deal with max_new_tokens for flattened interleaving! (should scale with num_codebooks?)
+            2
         )
 
         # define models
         self.smodel, self.llm_first_stage, self.llm_second_stage = build_models(
             config_first_stage, config_second_stage, self.sampling_config.device, self.sampling_config.use_kv_cache
         )
+
     def predict(
         self,
         input_audio: Path = Input(description="Input Audio"),
-        text: str = Input(default="This is a demo of text to speech by MetaVoice-1B, an open-source foundational audio model by MetaVoice."),
+        text: str = Input(
+            default="This is a demo of text to speech by MetaVoice-1B, an open-source foundational audio model by MetaVoice."),
+        temperature: float = Input(
+            description="Expressiveness / Randomness",
+            default=1.0
+        ),
+        guidance_scale: float = Input(
+            description="Guidance scale",
+            default=None
+        ),
+        max_new_tokens: int = Input(
+            description="Max new tokens",
+            default=864
+        )
     ) -> Path:
         self.sampling_config.spk_cond_path = input_audio
         self.sampling_config.text = text
@@ -716,10 +732,11 @@ class Predictor(BasePredictor):
             self.sampling_config.enhancer,
             self.first_stage_ckpt_path,
             self.second_stage_ckpt_path,
-            self.sampling_config.guidance_scale,
-            max_new_tokens=self.sampling_config.max_new_tokens,
+            guidance_scale,  # originally self.sampling_config.guidance_scale,
+            # originallyy max_new_tokens=self.sampling_config.max_new_tokens,
+            max_new_tokens=max_new_tokens,
             top_k=self.sampling_config.top_k,
             top_p=self.sampling_config.top_p,
-            temperature=self.sampling_config.temperature,
+            temperature=temperature  # originally: temperature=self.sampling_config.temperature,
         )
         return Path(output_audio)
